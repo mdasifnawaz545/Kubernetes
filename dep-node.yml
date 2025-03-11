@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-node-unique-app
+spec:
+  selector:
+    matchLabels:
+      app: my-node-unique-app
+  template:
+    metadata:
+      labels:
+        app: my-node-unique-app
+    spec:
+      containers:
+      - name: my-node-unique-app
+        image: philippaul/node-mongo-db:03
+        env: 
+          - name: MONGO_HOST
+            valueFrom:
+             configMapKeyRef:
+              name:  mongo-node-config
+              key: MONGO_HOST
+
+          - name: MONGO_PORT
+            valueFrom: 
+             configMapKeyRef:
+              name: mongo-node-config
+              key: MONGO_PORT           
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mode-service
+spec:
+  selector:
+    app: my-node-unique-app
+  ports:
+  - port: 3000
+    targetPort: 3000
+

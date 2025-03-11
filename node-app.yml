@@ -1,20 +1,27 @@
 apiVersion : apps/v1
 kind : Deployment
 metadata:
-  name: myapp # Name of the deployment server
+  name: multidep # Name of the deployment server
 spec:
-  replicas : 3
+  replicas : 1
   selector:
     matchLabels:
-      app: myapp 
+      app: multiPOD 
   template: # It is noting but the config of creation of the pods inside a deployment server
     metadata:
       labels:
-        app: myapp
+        app: multiPOD
     spec:
       containers:
-      - name: myapp
-        image: mdasifnawaz/react-app-with-kubernetes:02
+      - name: mongo-db
+        image: mongo
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+
+      - name: my-node-app
+        image: philippaul/node-mongo-db:02
         resources:
           limits:
             memory: "128Mi"

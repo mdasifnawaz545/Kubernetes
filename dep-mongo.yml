@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-mongo-unique-app
+spec:
+  selector:
+    matchLabels:
+      app: my-mongo-unique-app
+  template:
+    metadata:
+      labels:
+        app: my-mongo-unique-app
+    spec:
+      containers:
+      - name: my-mongo-unique-app
+        image: mongo
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: my-mongo-unique-app
+  ports:
+  - port: 27017
+    targetPort: 27017
+
+
+
